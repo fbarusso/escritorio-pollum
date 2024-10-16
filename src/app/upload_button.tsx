@@ -1,7 +1,16 @@
 "use client";
 
 import React, { useRef, useState, ChangeEvent, useCallback } from "react";
-import { Button, Typography, Box, Snackbar, Alert } from "@mui/material";
+import {
+  Button,
+  Typography,
+  Box,
+  Snackbar,
+  Alert,
+  Divider,
+  Card,
+  Stack,
+} from "@mui/material";
 
 const SEPARATOR = "|";
 
@@ -84,10 +93,10 @@ const useFileHandler = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `modified_${fileName}`;
+    a.download = `convertido_${fileName}`;
     document.body.appendChild(a);
     a.click();
-    a.addEventListener("click", () => URL.revokeObjectURL(url)); // Revoke after click
+    a.addEventListener("click", () => URL.revokeObjectURL(url));
     document.body.removeChild(a);
   }, [modifiedContent, fileName]);
 
@@ -121,33 +130,49 @@ const UploadButton: React.FC = () => {
   }, [setError]);
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-      <Button variant="contained" color="primary" onClick={handleButtonClick}>
-        Upload .txt File
-      </Button>
-      <input
-        type="file"
-        accept=".txt"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={handleFileChange}
-        aria-label="Upload .txt file"
-      />
-      {fileName && (
-        <>
-          <Typography variant="subtitle1" aria-live="polite">
-            Uploaded: {fileName}
+    <Card
+      variant="outlined"
+      sx={{ backgroundColor: "#121212", border: "1px solid #353738" }}
+    >
+      <Box sx={{ p: 4 }}>
+        <Typography gutterBottom variant="h5" className="text-primary">
+          Pollum parser
+        </Typography>
+        <Typography variant="body2" className="text-secondary">
+          Conversão de arquivos de pagamentos (registros 5100 e 5110).
+        </Typography>
+      </Box>
+      <Divider sx={{ backgroundColor: "#373737" }} />
+      <Box sx={{ p: 4 }}>
+        <Stack direction={"column"}>
+          <Typography variant="body2" className="text-secondary">
+            {fileName
+              ? `Arquivo selecionado: ${fileName}`
+              : "Nenhum arquivo selecionado."}{" "}
           </Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleDownload}
-            disabled={!modifiedContent}
-          >
-            Download Modified File
-          </Button>
-        </>
-      )}
+          <Box height={16} />
+          <Stack direction="row" justifyContent={"space-between"}>
+            <Button onClick={handleButtonClick}>SELECIONAR ARQUIVO</Button>
+            <input
+              type="file"
+              accept=".txt"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+              aria-label="Upload .txt file"
+            />
+            {modifiedContent && (
+              <Button
+                variant="contained"
+                onClick={handleDownload}
+                disabled={!modifiedContent}
+              >
+                BAIXAR ARQUIVO
+              </Button>
+            )}
+          </Stack>
+        </Stack>
+      </Box>
       <Snackbar
         open={!!error}
         autoHideDuration={4000}
@@ -157,7 +182,7 @@ const UploadButton: React.FC = () => {
           {error}
         </Alert>
       </Snackbar>
-    </Box>
+    </Card>
   );
 };
 

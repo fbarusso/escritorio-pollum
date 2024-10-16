@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+}
+
+.home-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #16181C;
+}
+
+.text-primary {
+    color: #ffffffde;
+}
+
+.text-secondary {
+    color: #ffffffb3;
+}
