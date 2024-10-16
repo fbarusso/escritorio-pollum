@@ -131,7 +131,8 @@ const useFileHandler = (type: string) => {
         // Update the modified content state
         setModifiedContent(modifiedLines.join(""));
       } catch (err) {
-        setError("Ocorreu um erro ao converter o arquivo.");
+        console.log("Ocorreu um erro ao converter o arquivo: ", err);
+        setError("Ocorreu um erro ao converter o arquivo");
       }
     },
     [type]
@@ -145,7 +146,7 @@ const useFileHandler = (type: string) => {
         setFile(file);
         parseFile(file);
       } else {
-        setError("Ocorreu um erro ao converter o arquivo.");
+        setError("Ocorreu um erro ao converter o arquivo");
         event.target.value = "";
       }
     },
