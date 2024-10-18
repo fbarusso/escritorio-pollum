@@ -107,6 +107,8 @@ const useFileHandler = (type: string) => {
 
             // Set specific values for 5200
             outputValues5200[17] = "";
+            outputValues5200[8] = inputValues5200[9];
+            outputValues5200[9] = inputValues5200[8];
 
             // Copy values from input 5210
             for (let index = 0; index < 9; index++) {
