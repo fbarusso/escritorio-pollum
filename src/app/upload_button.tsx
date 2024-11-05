@@ -22,6 +22,7 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
+import * as chardet from 'chardet';
 
 const SEPARATOR = "|";
 
@@ -34,8 +35,13 @@ const useFileHandler = (type: string) => {
   const parseFile = useCallback(
     async (file: File) => {
       try {
-        const content = await file.text();
+        const arrayBuffer = await file.arrayBuffer();
+        const encoding = chardet.detect(Buffer.from(arrayBuffer)) || "utf-8";
+        const decoder = new TextDecoder(encoding);
+        const content = decoder.decode(arrayBuffer);
         const lines = content.split("\n");
+
+        console.log("Encoding: ", encoding);
 
         const modifiedLines: string[] = [];
 
