@@ -41,8 +41,6 @@ const useFileHandler = (type: string) => {
         const content = decoder.decode(arrayBuffer);
         const lines = content.split("\n");
 
-        console.log("Encoding: ", encoding);
-
         const modifiedLines: string[] = [];
 
         if (type === "payments") {
@@ -67,6 +65,7 @@ const useFileHandler = (type: string) => {
             }
 
             // Set specific values for 5100
+            outputValues5100[1] = outputValues5100[1] === "52" ? "39" : outputValues5100[1];
             outputValues5100[3] = inputValues5100[3] || "0";
             outputValues5100[11] = inputValues5100[11] || "0,00";
             outputValues5100[19] = inputValues5110[9] || "";
@@ -78,7 +77,6 @@ const useFileHandler = (type: string) => {
 
             // Set specific values for 5110
             outputValues5110[2] = "2077";
-            outputValues5110[3] = "2007";
             outputValues5110[8] = "";
 
             // Construct the output lines
@@ -120,10 +118,6 @@ const useFileHandler = (type: string) => {
             for (let index = 0; index < 9; index++) {
               outputValues5210[index] = inputValues5210[index] || "";
             }
-
-            // Set specific values for 5210
-            outputValues5210[2] = "2007";
-            outputValues5210[3] = "2016";
 
             // Construct the output lines
             const outputLine5200 =
