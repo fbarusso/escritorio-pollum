@@ -66,7 +66,7 @@ const payments = (fileContent: string): Result<string, string> => {
     }
   } catch (error) {
     return Failure(
-      "Erro ao converter o arquivo de pagamentos para o GrupoMaxinutri"
+      `Erro ao converter o arquivo de pagamentos para o GrupoMaxinutri: ${error}`
     );
   }
   return Failure(
@@ -122,7 +122,7 @@ const receipts = (fileContent: string): Result<string, string> => {
     }
   } catch (error) {
     return Failure(
-      "Erro ao converter o arquivo de recebimentos para o GrupoMaxinutri"
+      `Erro ao converter o arquivo de recebimentos para o GrupoMaxinutri: ${error}`
     );
   }
   return Failure(

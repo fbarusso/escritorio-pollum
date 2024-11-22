@@ -28,7 +28,6 @@ import { toast } from "sonner";
 export default function Home() {
   const [fileType, setFileType] = useState("");
   const [customer, setCustomer] = useState("");
-  const [file, setFile] = useState<File | null>(null);
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [isFileConverted, setIsFileConverted] = useState(false);
 
@@ -41,8 +40,6 @@ export default function Home() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      setFile(selectedFile);
-
       const reader = new FileReader();
       reader.onload = (event) => {
         setFileContent(event.target?.result as string);
@@ -69,7 +66,6 @@ export default function Home() {
   const onClickClear = () => {
     setFileType("");
     setCustomer("");
-    setFile(null);
     setFileContent(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -81,7 +77,6 @@ export default function Home() {
     setIsFileConverted(false);
     setFileType("");
     setCustomer("");
-    setFile(null);
     setFileContent(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
