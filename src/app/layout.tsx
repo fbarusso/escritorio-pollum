@@ -1,20 +1,10 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import { Toaster } from "sonner";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pollum parser",
-  description: "Accounting parsing tools",
+  title: "Conversor Pollum",
+  description: "Conversão de arquivos de pagamentos e recebimentosp",
 };
 
 export default function RootLayout({
@@ -24,8 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+      <body className={"antialiased"}>
+        {children} <Toaster />
       </body>
     </html>
   );
