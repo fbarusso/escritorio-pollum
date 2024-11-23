@@ -23,6 +23,7 @@ import { convert } from "@/lib/converters/converter";
 import { customers } from "@/lib/customers";
 import { download } from "@/lib/download";
 import { fileTypes } from "@/lib/file-types";
+import chardet from "chardet";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -42,18 +43,24 @@ export default function Home() {
     return fileType !== "" && customer !== "" && fileContent !== null;
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      setFileName(selectedFile.name);
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setFileContent(event.target?.result as string);
-      };
-      reader.onerror = (error) => {
-        toast.error(`Erro ao ler o arquivo selecionado: ${error}`);
-      };
-      reader.readAsText(selectedFile);
+      try {
+        setFileName(selectedFile.name);
+
+        const arrayBuffer = await selectedFile.arrayBuffer();
+        const binaryData = new Uint8Array(arrayBuffer);
+        const detectedEncoding = chardet.detect(Buffer.from(binaryData));
+        const decoder = new TextDecoder(detectedEncoding || "utf-8");
+        const fileContent = decoder.decode(binaryData);
+
+        setFileContent(fileContent);
+      } catch (error) {
+        toast.error(`Erro ao processar o arquivo selecionado: ${error}`);
+      }
+    } else {
+      toast.error("Erro ao processar o arquivo selecionado.");
     }
   };
 
@@ -124,7 +131,7 @@ export default function Home() {
                 <span className="font-bold">Cliente:</span> {customer}
               </li>
               <li>
-                <span className="font-bold">Arquivo convertido:</span> teste
+                <span className="font-bold">Arquivo convertido:</span> convertido_{fileName}
               </li>
             </ul>
           </CardContent>
