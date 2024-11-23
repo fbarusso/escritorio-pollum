@@ -1,7 +1,7 @@
 import { fileTypes } from "@/lib/file-types";
 import { Failure, Result, Success } from "@/lib/result";
 
-const SEPARATOR = ";";
+const SEPARATOR = "|";
 
 export const convertGrupoMaxinutri = (
   fileType: string,
@@ -61,17 +61,14 @@ const payments = (fileContent: string): Result<string, string> => {
 
       // Add converted lines to the array
       convertedLines.push(outputLine5100, outputLine5110);
-      const convertedContent = convertedLines.join("");
-      return Success(convertedContent);
     }
+    const convertedContent = convertedLines.join("");
+    return Success(convertedContent);
   } catch (error) {
     return Failure(
       `Erro ao converter o arquivo de pagamentos para o GrupoMaxinutri: ${error}`
     );
   }
-  return Failure(
-    "Erro ao converter o arquivo de pagamentos para o GrupoMaxinutri"
-  );
 };
 
 const receipts = (fileContent: string): Result<string, string> => {
@@ -117,15 +114,12 @@ const receipts = (fileContent: string): Result<string, string> => {
 
       // Add modified lines to the array
       convertedLines.push(outputLine5200, outputLine5210);
-      const convertedContent = convertedLines.join("");
-      return Success(convertedContent);
     }
+    const convertedContent = convertedLines.join("");
+    return Success(convertedContent);
   } catch (error) {
     return Failure(
       `Erro ao converter o arquivo de recebimentos para o GrupoMaxinutri: ${error}`
     );
   }
-  return Failure(
-    "Erro ao converter o arquivo de recebimentos para o GrupoMaxinutri"
-  );
 };

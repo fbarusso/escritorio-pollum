@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { convert } from "@/lib/converters/converter";
 import { customers } from "@/lib/customers";
+import { download } from "@/lib/download";
 import { fileTypes } from "@/lib/file-types";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
@@ -28,7 +29,11 @@ import { toast } from "sonner";
 export default function Home() {
   const [fileType, setFileType] = useState("");
   const [customer, setCustomer] = useState("");
+  const [fileName, setFileName] = useState<string | null>(null);
   const [fileContent, setFileContent] = useState<string | null>(null);
+  const [convertedFileContent, setConvertedFileContet] = useState<
+    string | null
+  >(null);
   const [isFileConverted, setIsFileConverted] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -40,26 +45,15 @@ export default function Home() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
+      setFileName(selectedFile.name);
       const reader = new FileReader();
       reader.onload = (event) => {
         setFileContent(event.target?.result as string);
       };
       reader.onerror = (error) => {
-        console.error("Error reading file:", error);
+        toast.error("Erro ao ler o arquivo selecionado");
       };
       reader.readAsText(selectedFile);
-    }
-  };
-
-  const onClickConvert = () => {
-    console.log(fileType, customer);
-    const result = convert(fileType, customer, fileContent as string);
-
-    if (result.success) {
-      setIsFileConverted(true);
-      toast.success("Arquivo convertido com sucesso");
-    } else {
-      toast.error(result.error);
     }
   };
 
@@ -73,6 +67,18 @@ export default function Home() {
     toast.success("Formulário limpo");
   };
 
+  const onClickConvert = () => {
+    const result = convert(fileType, customer, fileContent as string);
+
+    if (result.success) {
+      setIsFileConverted(true);
+      setConvertedFileContet(result.value);
+      toast.success("Arquivo convertido com sucesso");
+    } else {
+      toast.error(result.error);
+    }
+  };
+
   const onClickConvertAgain = () => {
     setIsFileConverted(false);
     setFileType("");
@@ -80,6 +86,14 @@ export default function Home() {
     setFileContent(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
+    }
+  };
+
+  const onClickDonwload = () => {
+    if (fileName && convertedFileContent) {
+      download(fileName, convertedFileContent);
+    } else {
+      toast.error("Erro ao fazer o download do arquivo convertido");
     }
   };
 
@@ -118,7 +132,7 @@ export default function Home() {
             <Button variant="outline" onClick={onClickConvertAgain}>
               Converter outro arquivo
             </Button>
-            <Button>Download</Button>
+            <Button onClick={onClickDonwload}>Download</Button>
           </CardFooter>
         </Card>
       ) : (
