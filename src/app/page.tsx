@@ -51,7 +51,7 @@ export default function Home() {
         setFileContent(event.target?.result as string);
       };
       reader.onerror = (error) => {
-        toast.error("Erro ao ler o arquivo selecionado");
+        toast.error(`Erro ao ler o arquivo selecionado: ${error}`);
       };
       reader.readAsText(selectedFile);
     }
