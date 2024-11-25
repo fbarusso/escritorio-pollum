@@ -75,14 +75,17 @@ export default function Home() {
   };
 
   const onClickConvert = () => {
-    const result = convert(fileType, customer, fileContent as string);
-
-    if (result.success) {
-      setIsFileConverted(true);
-      setConvertedFileContet(result.value);
-      toast.success("Arquivo convertido com sucesso");
+    if (fileContent) {
+      const result = convert(fileType, customer, fileContent);
+      if (result.success) {
+        setIsFileConverted(true);
+        setConvertedFileContet(result.value);
+        toast.success("Arquivo convertido com sucesso");
+      } else {
+        toast.error(result.error);
+      }
     } else {
-      toast.error(result.error);
+      toast.error("Erro ao converter o arquivo");
     }
   };
 
@@ -131,7 +134,8 @@ export default function Home() {
                 <span className="font-bold">Cliente:</span> {customer}
               </li>
               <li>
-                <span className="font-bold">Arquivo convertido:</span> convertido_{fileName}
+                <span className="font-bold">Arquivo convertido:</span>{" "}
+                convertido_{fileName}
               </li>
             </ul>
           </CardContent>
